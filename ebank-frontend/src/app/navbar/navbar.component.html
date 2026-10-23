@@ -1,0 +1,31 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark px-3">
+  <span class="navbar-brand"><i class="bi bi-bank"></i> E-Bank</span>
+  <ul class="navbar-nav me-auto">
+    <li class="nav-item"><a class="nav-link" routerLink="/admin/dashboard" routerLinkActive="active"><i class="bi bi-graph-up"></i> Dashboard</a></li>
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"><i class="bi bi-people"></i> Clients</a>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" routerLink="/admin/customers">Rechercher</a></li>
+        @if (authService.hasRole('ADMIN')) {
+          <li><a class="dropdown-item" routerLink="/admin/new-customer">Nouveau client</a></li>
+        }
+      </ul>
+    </li>
+    <li class="nav-item"><a class="nav-link" routerLink="/admin/accounts" routerLinkActive="active"><i class="bi bi-credit-card"></i> Comptes</a></li>
+    <li class="nav-item"><a class="nav-link" routerLink="/admin/chatbot" routerLinkActive="active"><i class="bi bi-robot"></i> Assistant</a></li>
+    @if (authService.hasRole('ADMIN')) {
+      <li class="nav-item"><a class="nav-link" routerLink="/admin/users" routerLinkActive="active"><i class="bi bi-person-gear"></i> Utilisateurs</a></li>
+    }
+  </ul>
+  <div class="dropdown">
+    <button class="btn btn-outline-light btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+      <i class="bi bi-person-circle"></i> {{ authService.username }}
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end">
+      <li><span class="dropdown-item-text small text-muted">{{ authService.roles.join(', ') }}</span></li>
+      <li><a class="dropdown-item" routerLink="/admin/change-password"><i class="bi bi-key"></i> Changer le mot de passe</a></li>
+      <li><hr class="dropdown-divider"></li>
+      <li><button class="dropdown-item" (click)="logout()"><i class="bi bi-box-arrow-right"></i> Déconnexion</button></li>
+    </ul>
+  </div>
+</nav>
