@@ -1,0 +1,23 @@
+<div class="container">
+  <div class="row mt-5">
+    <div class="col-md-4 offset-md-4">
+      <div class="text-center mb-3"><i class="bi bi-bank fs-1 text-primary"></i><h3>E-Bank</h3></div>
+      <div class="card shadow-sm">
+        <div class="card-body">
+          @if (errorMessage) { <div class="alert alert-danger">{{ errorMessage }}</div> }
+          <form [formGroup]="formLogin" (ngSubmit)="handleLogin()">
+            <div class="mb-3">
+              <label class="form-label">Utilisateur</label>
+              <input class="form-control" formControlName="username" autofocus>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Mot de passe</label>
+              <input class="form-control" type="password" formControlName="password">
+            </div>
+            <button class="btn btn-primary w-100" [disabled]="formLogin.invalid">Se connecter</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
