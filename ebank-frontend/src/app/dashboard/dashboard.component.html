@@ -1,0 +1,19 @@
+@if (errorMessage) { <div class="alert alert-danger">{{ errorMessage }}</div> }
+@if (stats) {
+  <div class="row g-3 mb-3">
+    <div class="col-md-3"><div class="card text-bg-primary"><div class="card-body"><small>Clients</small><h3>{{ stats.totalCustomers }}</h3></div></div></div>
+    <div class="col-md-3"><div class="card text-bg-success"><div class="card-body"><small>Comptes</small><h3>{{ stats.totalAccounts }}</h3></div></div></div>
+    <div class="col-md-3"><div class="card text-bg-warning"><div class="card-body"><small>Opérations</small><h3>{{ stats.totalOperations }}</h3></div></div></div>
+    <div class="col-md-3"><div class="card text-bg-dark"><div class="card-body"><small>Encours total (DH)</small><h3>{{ stats.totalBalance | number:'1.0-0' }}</h3></div></div></div>
+  </div>
+  <div class="row g-3">
+    <div class="col-lg-8"><div class="card"><div class="card-header">Montant des opérations par mois</div>
+      <div class="card-body"><canvas baseChart [data]="monthlyData" [options]="barOptions" type="bar"></canvas></div></div></div>
+    <div class="col-lg-4"><div class="card"><div class="card-header">Répartition des comptes</div>
+      <div class="card-body"><canvas baseChart [data]="typeData" type="pie"></canvas></div></div></div>
+    <div class="col-lg-4"><div class="card"><div class="card-header">Statut des comptes</div>
+      <div class="card-body"><canvas baseChart [data]="statusData" type="doughnut"></canvas></div></div></div>
+    <div class="col-lg-8"><div class="card"><div class="card-header">Top 5 clients par solde</div>
+      <div class="card-body"><canvas baseChart [data]="topData" [options]="hBarOptions" type="bar"></canvas></div></div></div>
+  </div>
+}
