@@ -1,0 +1,67 @@
+<div class="row g-3">
+  <div class="col-lg-7">
+    <div class="card">
+      <div class="card-header"><i class="bi bi-credit-card"></i> Consulter un compte</div>
+      <div class="card-body">
+        <form [formGroup]="accountFormGroup" (ngSubmit)="currentPage = 0; handleSearchAccount()" class="input-group mb-3">
+          <span class="input-group-text">Identifiant</span>
+          <input class="form-control font-monospace" formControlName="accountId">
+          <button class="btn btn-primary"><i class="bi bi-search"></i></button>
+        </form>
+        @if (errorMessage) { <div class="alert alert-danger">{{ errorMessage }}</div> }
+        @if (account) {
+          <div class="row mb-2">
+            <div class="col"><small class="text-muted">Titulaire</small><div>{{ account.customerName }}</div></div>
+            <div class="col"><small class="text-muted">Type</small><div>{{ account.type === 'CurrentAccount' ? 'Compte courant' : 'Compte épargne' }}</div></div>
+            <div class="col"><small class="text-muted">Solde</small><div class="fs-5 fw-bold">{{ account.balance | number:'1.2-2' }}</div></div>
+          </div>
+          <table class="table table-sm">
+            <thead><tr><th>Date</th><th>Type</th><th class="text-end">Montant</th><th>Description</th><th>Par</th></tr></thead>
+            <tbody>
+              @for (op of account.accountOperationDTOS; track op.id) {
+                <tr>
+                  <td>{{ op.operationDate | date:'dd/MM/yyyy HH:mm' }}</td>
+                  <td><span class="badge" [class]="op.type === 'CREDIT' ? 'text-bg-success' : 'text-bg-danger'">{{ op.type }}</span></td>
+                  <td class="text-end">{{ op.amount | number:'1.2-2' }}</td>
+                  <td>{{ op.description }}</td>
+                  <td><small>{{ op.performedBy }}</small></td>
+                </tr>
+              }
+            </tbody>
+          </table>
+          <ul class="pagination pagination-sm flex-wrap">
+            @for (p of pages(); track p) {
+              <li class="page-item" [class.active]="p === currentPage"><button class="page-link" (click)="gotoPage(p)">{{ p + 1 }}</button></li>
+            }
+          </ul>
+        }
+      </div>
+    </div>
+  </div>
+  @if (account && authService.hasRole('ADMIN')) {
+    <div class="col-lg-5">
+      <div class="card">
+        <div class="card-header"><i class="bi bi-arrow-left-right"></i> Opérations</div>
+        <div class="card-body">
+          @if (operationMessage) { <div class="alert alert-info py-2">{{ operationMessage }}</div> }
+          <form [formGroup]="operationFormGroup" (ngSubmit)="handleAccountOperation()">
+            <div class="mb-2">
+              @for (t of ['DEBIT', 'CREDIT', 'TRANSFER']; track t) {
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" [value]="t" formControlName="operationType" [id]="'op' + t">
+                  <label class="form-check-label" [for]="'op' + t">{{ t }}</label>
+                </div>
+              }
+            </div>
+            @if (operationFormGroup.value.operationType === 'TRANSFER') {
+              <div class="mb-2"><label class="form-label">Compte destinataire</label><input class="form-control font-monospace" formControlName="accountDestination"></div>
+            }
+            <div class="mb-2"><label class="form-label">Montant</label><input class="form-control" type="number" formControlName="amount"></div>
+            <div class="mb-3"><label class="form-label">Description</label><input class="form-control" formControlName="description"></div>
+            <button class="btn btn-success w-100" [disabled]="operationFormGroup.invalid">Valider</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  }
+</div>
