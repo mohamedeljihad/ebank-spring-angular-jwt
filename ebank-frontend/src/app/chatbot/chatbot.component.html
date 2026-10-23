@@ -1,0 +1,24 @@
+<div class="col-lg-8 offset-lg-2">
+  <div class="card">
+    <div class="card-header"><i class="bi bi-robot"></i> Assistant E-Bank (RAG + outils)</div>
+    <div class="card-body chat-body">
+      @for (m of messages; track $index) {
+        <div class="d-flex mb-2" [class.justify-content-end]="m.from === 'user'">
+          <div class="bubble" [class.user]="m.from === 'user'">{{ m.text }}</div>
+        </div>
+      }
+      @if (loading) { <div class="text-muted small"><span class="spinner-border spinner-border-sm"></span> L'assistant réfléchit…</div> }
+    </div>
+    <div class="card-footer">
+      <div class="mb-2">
+        @for (s of suggestions; track s) {
+          <button class="btn btn-sm btn-outline-secondary me-1 mb-1" (click)="send(s)">{{ s }}</button>
+        }
+      </div>
+      <form class="input-group" (ngSubmit)="send()">
+        <input class="form-control" name="question" [(ngModel)]="question" placeholder="Posez votre question…">
+        <button class="btn btn-primary" [disabled]="loading"><i class="bi bi-send"></i></button>
+      </form>
+    </div>
+  </div>
+</div>
