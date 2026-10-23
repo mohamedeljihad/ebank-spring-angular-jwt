@@ -1,0 +1,21 @@
+<div class="col-md-6 offset-md-3">
+  <div class="card">
+    <div class="card-header">Nouveau client</div>
+    <div class="card-body">
+      @if (errorMessage) { <div class="alert alert-danger">{{ errorMessage }}</div> }
+      <form [formGroup]="form" (ngSubmit)="save()">
+        <div class="mb-3">
+          <label class="form-label">Nom</label>
+          <input class="form-control" formControlName="name">
+          @if (form.controls['name'].touched && form.controls['name'].invalid) { <small class="text-danger">3 caractères minimum</small> }
+        </div>
+        <div class="mb-3">
+          <label class="form-label">E-mail</label>
+          <input class="form-control" formControlName="email">
+          @if (form.controls['email'].touched && form.controls['email'].invalid) { <small class="text-danger">E-mail invalide</small> }
+        </div>
+        <button class="btn btn-primary" [disabled]="form.invalid"><i class="bi bi-save"></i> Enregistrer</button>
+      </form>
+    </div>
+  </div>
+</div>
