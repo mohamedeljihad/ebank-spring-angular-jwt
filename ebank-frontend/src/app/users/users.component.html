@@ -1,0 +1,29 @@
+<div class="row g-3">
+  <div class="col-lg-7">
+    <div class="card"><div class="card-header">Utilisateurs</div>
+      <div class="card-body">
+        <table class="table">
+          <thead><tr><th>Utilisateur</th><th>E-mail</th><th>Rôles</th></tr></thead>
+          <tbody>
+            @for (u of users; track u.username) { <tr><td>{{ u.username }}</td><td>{{ u.email }}</td><td>{{ rolesOf(u) }}</td></tr> }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="card"><div class="card-header">Nouvel utilisateur</div>
+      <div class="card-body">
+        @if (error) { <div class="alert alert-danger">{{ error }}</div> }
+        <form [formGroup]="form" (ngSubmit)="addUser()">
+          <div class="mb-2"><label class="form-label">Utilisateur</label><input class="form-control" formControlName="username"></div>
+          <div class="mb-2"><label class="form-label">Mot de passe</label><input class="form-control" type="password" formControlName="password"></div>
+          <div class="mb-2"><label class="form-label">E-mail</label><input class="form-control" formControlName="email"></div>
+          <div class="mb-3"><label class="form-label">Rôle</label>
+            <select class="form-select" formControlName="role"><option value="USER">USER</option><option value="ADMIN">ADMIN</option></select></div>
+          <button class="btn btn-primary" [disabled]="form.invalid">Ajouter</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
