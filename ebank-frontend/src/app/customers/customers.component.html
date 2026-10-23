@@ -1,0 +1,34 @@
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span><i class="bi bi-people"></i> Clients</span>
+    @if (authService.hasRole('ADMIN')) {
+      <a class="btn btn-sm btn-primary" routerLink="/admin/new-customer"><i class="bi bi-person-plus"></i> Nouveau</a>
+    }
+  </div>
+  <div class="card-body">
+    <form class="row g-2 mb-3" (ngSubmit)="handleSearch()">
+      <div class="col-auto"><input class="form-control" name="keyword" [(ngModel)]="keyword" placeholder="Nom ou e-mail"></div>
+      <div class="col-auto"><button class="btn btn-outline-primary"><i class="bi bi-search"></i> Chercher</button></div>
+    </form>
+    @if (errorMessage) { <div class="alert alert-danger">{{ errorMessage }}</div> }
+    <table class="table table-hover align-middle">
+      <thead><tr><th>ID</th><th>Nom</th><th>E-mail</th><th>Créé par</th><th></th></tr></thead>
+      <tbody>
+        @for (c of customers; track c.id) {
+          <tr>
+            <td>{{ c.id }}</td><td>{{ c.name }}</td><td>{{ c.email }}</td><td><span class="badge text-bg-light">{{ c.createdBy }}</span></td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-success me-1" (click)="handleAccounts(c)" title="Comptes"><i class="bi bi-credit-card"></i></button>
+              @if (authService.hasRole('ADMIN')) {
+                <a class="btn btn-sm btn-outline-primary me-1" [routerLink]="['/admin/edit-customer', c.id]" title="Modifier"><i class="bi bi-pencil"></i></a>
+                <button class="btn btn-sm btn-outline-danger" (click)="handleDelete(c)" title="Supprimer"><i class="bi bi-trash"></i></button>
+              }
+            </td>
+          </tr>
+        } @empty {
+          <tr><td colspan="5" class="text-muted">Aucun client</td></tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
