@@ -1,0 +1,15 @@
+<div class="col-md-6 offset-md-3">
+  <div class="card">
+    <div class="card-header">Modifier le client</div>
+    <div class="card-body">
+      @if (errorMessage) { <div class="alert alert-danger">{{ errorMessage }}</div> }
+      @if (form) {
+        <form [formGroup]="form" (ngSubmit)="update()">
+          <div class="mb-3"><label class="form-label">Nom</label><input class="form-control" formControlName="name"></div>
+          <div class="mb-3"><label class="form-label">E-mail</label><input class="form-control" formControlName="email"></div>
+          <button class="btn btn-success" [disabled]="form.invalid"><i class="bi bi-save"></i> Mettre à jour</button>
+        </form>
+      }
+    </div>
+  </div>
+</div>
