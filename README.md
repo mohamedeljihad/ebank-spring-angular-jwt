@@ -107,16 +107,15 @@ npm start                            # http://localhost:4200
 ```
 
 ## Captures
-> À ajouter après exécution :
-> - login ;
-> - dashboard (graphiques) ;
-> - liste des clients en ADMIN et en USER ;
-> - création d'un compte ;
-> - historique et opérations ;
-> - virement refusé pour solde insuffisant ;
-> - Swagger UI avec le JWT ;
-> - conversation avec l'assistant dans Angular et dans Telegram ;
-> - changement de mot de passe.
+Backend lancé dans IntelliJ (`spring-boot:run`, port 8085) ; requêtes réelles envoyées à l'API.
+
+| Capture | Description |
+|---|---|
+| ![Démarrage](captures/01_intellij_demarrage.jpg) | Démarrage dans IntelliJ : 10 comptes créés au seed ; RAG désactivé sans `OPENAI_API_KEY` |
+| ![Tests API](captures/02_api_tests.jpg) | Scénario de test : login JWT (HS512), 401 sans jeton, clients, comptes, débit refusé (solde insuffisant), crédit, historique, dashboard, 403 pour `user1` |
+| ![Swagger](captures/03_swagger.jpg) | Swagger UI : endpoints clients, sécurité et comptes |
+
+> Le frontend Angular et le chatbot (OpenAI, Telegram) nécessitent Node.js et une clé `OPENAI_API_KEY` : sans clé, `/chat` renvoie un message explicite au lieu d'une erreur.
 
 ## Conclusion
 - Le projet assemble une architecture complète :
