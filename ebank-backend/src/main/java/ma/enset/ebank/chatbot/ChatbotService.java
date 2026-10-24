@@ -3,6 +3,7 @@ package ma.enset.ebank.chatbot;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.vectorstore.SimpleVectorStore;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /** Agent conversationnel : RAG (guide de la banque) + outils (données réelles des comptes). */
@@ -17,9 +18,12 @@ public class ChatbotService {
 
     private final ChatClient chatClient;
     private final BankTools bankTools;
+    private final boolean enabled;
 
-    public ChatbotService(ChatClient.Builder builder, SimpleVectorStore vectorStore, BankTools bankTools) {
+    public ChatbotService(ChatClient.Builder builder, SimpleVectorStore vectorStore, BankTools bankTools,
+                          @Value("${spring.ai.openai.api-key:no-key}") String apiKey) {
         this.bankTools = bankTools;
+        this.enabled = apiKey != null && !apiKey.isBlank() && !"no-key".equals(apiKey);
         this.chatClient = builder
                 .defaultSystem(SYSTEM)
                 .defaultAdvisors(QuestionAnswerAdvisor.builder(vectorStore).build())
@@ -27,10 +31,17 @@ public class ChatbotService {
     }
 
     public String ask(String question) {
-        return chatClient.prompt()
+        if (!enabled) {
+            return "Le chatbot est désactivé : définissez la variable d'environnement OPENAI_API_KEY puis redémarrez le backend.";
+        }
+        try {
+            return chatClient.prompt()
                 .user(question)
                 .tools(bankTools)
                 .call()
                 .content();
+        } catch (Exception e) {
+            return "Le service d'IA est momentanément indisponible : " + e.getMessage();
+        }
     }
 }
